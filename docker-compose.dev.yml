@@ -1,0 +1,13 @@
+version: '3.6'
+
+services:
+  iris_api:
+    image: iris_api
+    container_name: iris_api
+    build:
+      context: .
+      dockerfile: ops/release/Dockerfile
+    volumes:
+      - ".:/iris_api"
+    ports:
+      - "8000:8000"
