@@ -1,3 +1,7 @@
+"""
+Create connection to the MongoDB database
+"""
+
 from pymongo import MongoClient
 
 client = MongoClient()
@@ -9,6 +13,3 @@ db = client['iris']
 
 if 'features' not in db.list_collection_names():
     raise ConnectionError('The database has not been populated')
-
-
-

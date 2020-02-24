@@ -1,3 +1,7 @@
+"""
+DB provisioning script
+"""
+
 import sys
 
 import pandas as pd

@@ -1,3 +1,7 @@
+"""
+Main fastapi file that sets the available routers
+"""
+
 from fastapi import FastAPI
 
 from iris_api.app.api import ranges_api, stats_api
@@ -8,6 +12,9 @@ app = FastAPI()
 
 @app.on_event('shutdown')
 async def shutdown():
+    """
+    Close the mongodb connection in the end
+    """
     await client.close()
 
 app.include_router(ranges_api.router)
