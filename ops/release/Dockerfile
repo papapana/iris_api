@@ -1,5 +1,10 @@
 FROM python:3.8.1-alpine
 
+LABEL MAINTAINER="Vassilis Papapanagiotou <bpapapana@gmail.com>"
+
+ENV GROUP_ID=1000 \
+    USER_ID=1000
+
 ENV PYTHONBUFFERED 1
 ENV HOME /iris_api
 

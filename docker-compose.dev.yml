@@ -4,6 +4,7 @@ services:
   iris_api:
     image: iris_api
     container_name: iris_api
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ops/release/Dockerfile
@@ -11,3 +12,4 @@ services:
       - ".:/iris_api"
     ports:
       - "8000:8000"
+      
