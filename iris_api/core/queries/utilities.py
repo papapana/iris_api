@@ -1,3 +1,7 @@
+"""
+Creation of the DB queries and other utilities
+"""
+
 from collections import defaultdict
 from typing import List, Dict, Any, Optional, Union
 
@@ -27,6 +31,13 @@ def create_range_query(species: Union[str, List[str]], lower: Optional[Dict[str,
 
 
 def create_mean_query(species, lower, upper) -> List[Dict[str, Any]]:
+    """
+    Create the appropriate query for mean per column
+    :param species:
+    :param lower:
+    :param upper:
+    :return: mongodb query as a dictionary
+    """
     query = []
     q = create_range_query(species, lower, upper)
     if q:
