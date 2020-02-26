@@ -8,6 +8,56 @@ Sample API for the iris dataset
 
 ### With docker -- recommended
 
+1) Make sure [docker is installed](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/)
+is installed as well.
+
+2) Clone the project and cd into it:
+```bash
+git clone https://github.com/papapana/iris_api.git
+cd iris_api
+```
+
+3) Run the provisioning script that will populate the database, *the following commands might require **sudo** rights*
+```bash 
+docker-compose -f docker-compose.dev.yml up iris_provisioning
+```
+
+4) Now you can start the API server
+```bash 
+docker-compose -f docker-compose.dev.yml up iris_api
+```
+
+5) Navigate to [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) where you can test interactively the API
+    - Example `/range/` query: 
+        ```json 
+        {
+          "species": "setosa",
+          "lower": {
+            "sepal_length": 5.0,
+            "sepal_width": 3.0
+          },
+          "upper": {
+            "sepal_length": 5.1
+          }
+        }        
+        ```
+    - Example `/stats/mean` query:
+        ```json 
+        {
+          "species": [
+            "setosa",
+            "versicolor"
+          ],
+          "lower": {
+            "sepal_width": 3.0
+          },
+          "upper": {
+            "sepal_length": 6.1
+          }
+        }
+        ```
+---
+
 ### Without docker
 
 1) First make sure python 3.8 is available and mongodb is running.
