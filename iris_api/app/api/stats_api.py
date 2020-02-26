@@ -16,4 +16,4 @@ async def get_stats_mean(range_query: IrisQuery):
     :param range_query:
     :return: the mean by column specified
     """
-    return get_mean(**range_query.dict())
+    return get_mean(range_query)

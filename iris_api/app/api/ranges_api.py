@@ -16,4 +16,4 @@ async def ranges(range_query: IrisQuery):
     :param range_query:
     :return: json result for the specified range
     """
-    return column_range(**range_query.dict())
+    return column_range(range_query)

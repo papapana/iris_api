@@ -12,10 +12,11 @@ services:
     environment:
       APP_ENV: "prod"
       APP_DEBUG: "False"
-      APP_PORT: 5000
+      APP_PORT: 8000
       MONGODB_DATABASE: iris
       MONGODB_USERNAME: iris_user
       MONGODB_HOSTNAME: mongodb
+      MONGODB_PASSWORD: iris_password
     depends_on:
       - mongodb
     networks:
@@ -26,7 +27,7 @@ services:
       - appdata:/iris_api
     
   mongodb:
-    image: mongo: 4.0.8
+    image: mongo:4.0.8
     container_name: mongodb 
     restart: unless-stopped 
     command: mongod --auth
@@ -39,7 +40,7 @@ services:
     volumes:
       - mongodbdata:/data/db 
     networks:
-      -backend
+      - backend
 
 networks:
   backend:

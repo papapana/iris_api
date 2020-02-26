@@ -7,6 +7,9 @@ from typing import Dict, Optional, Literal, List, Union
 from fastapi import Query
 from pydantic import BaseModel
 
+IrisFlowersType = Literal['setosa', 'versicolor', 'virginica']
+IrisColumnsType = Literal['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+
 
 class IrisQuery(BaseModel):
     """
@@ -19,8 +22,8 @@ class IrisQuery(BaseModel):
 
     }
     """
-    species: Optional[Union[str, List[Literal['setosa', 'versicolor', 'virginica']]]] = None
-    lower: Optional[Dict[Literal['sepal_length', 'sepal_width', 'petal_length', 'petal_width'], float]] = None
-    upper: Optional[Dict[Literal['sepal_length', 'sepal_width', 'petal_length', 'petal_width'], float]] = None
-    page: int = Query(1, description='the page number', ge=1)
-    per_page: int = Query(150, description='how many results per page', ge=1)
+    species: Optional[Union[str, List[IrisFlowersType]]] = None
+    lower: Optional[Dict[IrisColumnsType, float]] = None
+    upper: Optional[Dict[IrisColumnsType, float]] = None
+    page: Optional[int] = Query(default=None, description='the page number', ge=1)
+    per_page: Optional[int] = Query(default=None, description='how many results per page', ge=1)
