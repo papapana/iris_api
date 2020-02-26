@@ -1,3 +1,7 @@
+"""
+The setup script used if API needs to be used as a package/library
+"""
+
 try:
     from setuptools import setup
 except ImportError:

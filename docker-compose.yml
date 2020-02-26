@@ -1,12 +1,68 @@
-version: '3.6'
+version: '3'
 
 services:
   iris_api:
     image: iris_api
     container_name: iris_api
+    restart: unless-stopped
     build:
       context: .
-      dockerfile: ops/release/Dockerfile
+      dockerfile: ops/dev/Dockerfile
     command: uvicorn iris_api.app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      - APP_ENV="prod"
+      - APP_DEBUG="False"
+      - APP_PORT=8000
+      - MONGODB_DATABASE=iris
+      - MONGODB_USERNAME=iris_user
+      - MONGODB_HOSTNAME=mongodb
+      - MONGODB_PASSWORD=iris_password
+    depends_on:
+      - iris_provisioning
+    networks:
+      - backend
     ports:
       - "8000:8000"
+    volumes:
+      - appdata:/iris_api
+
+  iris_provisioning:
+    image: iris_provisioning
+    container_name: iris_provisioning
+    command: ["/bin/sh", "wait_for_mongo.sh", "python", "./provision_db.py"]
+    build:
+      context: .
+      dockerfile: ops/dev/provisioning/Dockerfile
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+      - MONGODB_DATABASE=iris
+      - MONGODB_USERNAME=iris_user
+      - MONGODB_HOSTNAME=mongodb
+      - MONGODB_PASSWORD=iris_password
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  mongodb:
+    image: 'mongo'
+    container_name: 'my_mongo'
+    environment:
+        - MONGO_INITDB_DATABASE=iris
+        - MONGO_INITDB_ROOT_USERNAME=mongo
+        - MONGO_INITDB_ROOT_PASSWORD=mongo
+    volumes:
+        - ./mongo-volume:/data/db
+    ports:
+        - '27017-27019:27017-27019'
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  appdata:
+    driver: local
