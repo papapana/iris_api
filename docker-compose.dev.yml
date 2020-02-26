@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3'
 
 services:
   iris_api:
@@ -19,7 +19,6 @@ services:
       - MONGODB_PASSWORD=iris_password
     depends_on:
       - iris_provisioning
-      - mongodb
     networks:
       - backend
     ports:
@@ -30,7 +29,7 @@ services:
   iris_provisioning:
     image: iris_provisioning
     container_name: iris_provisioning
-    command: python ./provision_db.py
+    command: ["/bin/sh", "wait_for_mongo.sh", "python", "./provision_db.py"]
     build:
       context: .
       dockerfile: ops/dev/provisioning/Dockerfile
@@ -66,4 +65,3 @@ networks:
 
 volumes:
   appdata:
-    driver: local

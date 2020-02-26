@@ -1,4 +1,4 @@
-FROM python:3.8.1-alpine
+FROM python:3.8-slim-buster
 
 LABEL MAINTAINER="Vassilis Papapanagiotou <bpapapana@gmail.com>"
 
@@ -8,15 +8,8 @@ ENV GROUP_ID=1000 \
 ENV PYTHONBUFFERED 1
 ENV HOME /iris_api
 
-RUN addgroup -S iris_api && adduser -S iris_api -G iris_api
+RUN groupadd -r iris_api && useradd -r -g iris_api iris_api
 RUN mkdir -p /iris_api
-
-# install dependencies
-RUN set -eux \
-    && apk add --no-cache --virtual .build-deps build-base \
-        libressl-dev libffi-dev gcc musl-dev python3-dev \
-    && pip install --upgrade pip setuptools wheel \
-    && rm -rf /root/.cache/pip
 
 WORKDIR /iris_api
 

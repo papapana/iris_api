@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3'
 
 services:
   iris_api:
@@ -7,38 +7,55 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: ops/release/Dockerfile
+      dockerfile: ops/dev/Dockerfile
     command: uvicorn iris_api.app.main:app --host 0.0.0.0 --port 8000
     environment:
-      APP_ENV: "prod"
-      APP_DEBUG: "False"
-      APP_PORT: 8000
-      MONGODB_DATABASE: iris
-      MONGODB_USERNAME: iris_user
-      MONGODB_HOSTNAME: mongodb
-      MONGODB_PASSWORD: iris_password
+      - APP_ENV="prod"
+      - APP_DEBUG="False"
+      - APP_PORT=8000
+      - MONGODB_DATABASE=iris
+      - MONGODB_USERNAME=iris_user
+      - MONGODB_HOSTNAME=mongodb
+      - MONGODB_PASSWORD=iris_password
     depends_on:
-      - mongodb
+      - iris_provisioning
     networks:
       - backend
     ports:
       - "8000:8000"
     volumes:
       - appdata:/iris_api
-    
-  mongodb:
-    image: mongo:4.0.8
-    container_name: mongodb 
-    restart: unless-stopped 
-    command: mongod --auth
+
+  iris_provisioning:
+    image: iris_provisioning
+    container_name: iris_provisioning
+    command: ["/bin/sh", "wait_for_mongo.sh", "python", "./provision_db.py"]
+    build:
+      context: .
+      dockerfile: ops/dev/provisioning/Dockerfile
     environment:
-      MONGO_INITDB_ROOT_USERNAME: mongodbuser
-      MONGO_INITDB_ROOT_PASSWORD: mongodb_password
-      MONGO_INITDB_DATABASE: iris
-      MONGODB_DATA_DIR: /data/db
-      MONGOODB_LOG_DIR: /dev/null
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+      - MONGODB_DATABASE=iris
+      - MONGODB_USERNAME=iris_user
+      - MONGODB_HOSTNAME=mongodb
+      - MONGODB_PASSWORD=iris_password
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  mongodb:
+    image: 'mongo'
+    container_name: 'my_mongo'
+    environment:
+        - MONGO_INITDB_DATABASE=iris
+        - MONGO_INITDB_ROOT_USERNAME=mongo
+        - MONGO_INITDB_ROOT_PASSWORD=mongo
     volumes:
-      - mongodbdata:/data/db 
+        - ./mongo-volume:/data/db
+    ports:
+        - '27017-27019:27017-27019'
     networks:
       - backend
 
@@ -47,7 +64,5 @@ networks:
     driver: bridge
 
 volumes:
-  mongodbdata:
-    driver: local
   appdata:
     driver: local

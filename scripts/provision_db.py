@@ -37,7 +37,6 @@ if __name__ == '__main__':
                      names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'label'])
     df.label = df.label.replace({0: 'setosa', 1: 'versicolor', 2: 'virginica'})
 
-    print(db_uri)
     client = MongoClient(db_uri)
     try:
         db_names = set(client.list_database_names())
