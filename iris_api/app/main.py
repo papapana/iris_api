@@ -23,7 +23,6 @@ async def shutdown():
 app.include_router(ranges_api.router)
 app.include_router(stats_api.router)
 
-app.openapi = custom_openapi(app)
 
 # For debugging purposes
 if __name__ == '__main__':
