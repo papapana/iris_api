@@ -8,7 +8,7 @@ services:
     build:
       context: .
       dockerfile: ops/dev/Dockerfile
-    command: uvicorn iris_api.app.main:app --host 0.0.0.0 --port 8000
+    command: uvicorn iris_api.app.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
       - APP_ENV="prod"
       - APP_DEBUG="False"
@@ -24,7 +24,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - appdata:/iris_api
+      - ".:/iris_api"
 
   iris_provisioning:
     image: iris_provisioning
@@ -62,6 +62,3 @@ services:
 networks:
   backend:
     driver: bridge
-
-volumes:
-  appdata:

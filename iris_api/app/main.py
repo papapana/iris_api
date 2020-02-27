@@ -2,11 +2,11 @@
 Main fastapi file that sets the available routers
 """
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 
 from iris_api.app.api import ranges_api, stats_api
 from iris_api.app.db import client
-from iris_api.app.docs import custom_openapi
+
 
 app = FastAPI(title='Iris Dataset Exploration API',
               description='')
