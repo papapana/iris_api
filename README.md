@@ -19,6 +19,22 @@ Additionally, the setup is meant to be capable of scaling as much as possible. F
 very well, because we have dockerized the application, it can also be scaled horizontally easily at the level of the API.
 Furthermore, at the database level [MongoDB can also scale in multiple ways](https://www.mongodb.com/mongodb-scale).
 
+## Query structure
+
+All queries are REST API POST queries with the following structure:
+
+```
+    <> below means optional
+    The general query model:
+    {
+        <species: one or more of 'setosa', 'versicolor' or 'virginica' e.g. "setosa" or ["setosa", "virginica"]>
+        <lower: the lower bound by column, default -- no bound, e.g. {"sepal_length": 5, "petal_length": 3}>
+        <upper: the upper bound by column, default -- no bound, e.g. {"sepal_length": 5.2}>
+        <page: the page number if pagination is used, int >=1 or not provided>
+        <per_page: the results per page if pagination is used, int>=1 or not provided>
+    }
+```
+
 ## Installation
 
 ### With docker -- recommended
