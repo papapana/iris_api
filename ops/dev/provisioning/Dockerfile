@@ -1,4 +1,4 @@
-FROM python:3.8-slim-bullseye
+FROM python:3.12.7-slim-bullseye
 
 LABEL MAINTAINER="Vassilis Papapanagiotou <bpapapana@gmail.com>"
 
